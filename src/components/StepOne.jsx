@@ -1,5 +1,5 @@
 import React from "react";
-import * as calculoActions from "../actions/calculoActions";
+import * as CalculoActions from "../actions/CalculoActions";
 import { connect } from "react-redux";
 import StepTwo from "./StepTwo";
 
@@ -69,7 +69,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    next: calculo => dispatch(calculoActions.next(calculo))
+    next: calculo => dispatch(CalculoActions.next(calculo))
   };
 };
 
