@@ -1,7 +1,7 @@
 import React from "react";
 import * as CalculoActions from "../actions/CalculoActions";
 import { connect } from "react-redux";
-import StepTwo from "./StepTwo";
+import history from "../history";
 
 class StepOne extends React.Component {
   constructor(props) {
@@ -11,23 +11,29 @@ class StepOne extends React.Component {
       name: "",
       email: ""
     };
+
+    this.next = this.next.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(
+      "Estou no componentDidMount do StepOne" +
+        JSON.stringify(this.props.calculo)
+    );
+    this.setState({
+      name: this.props.calculo.name,
+      email: this.props.calculo.email
+    });
   }
 
   next = () => {
-    console.log("No StepOne name: " + this.state.name);
-    console.log("No StepOne email: " + this.state.email);
     let calculo = {
       name: this.state.name,
-      email: this.state.email,
-      street: null,
-      city: null,
-      state: null,
-      numtickets: 0,
-      shirtsize: "XL"
+      email: this.state.email
     };
 
     this.props.next(calculo);
-    console.log("Voltou aqui!");
+    history.push("/two");
   };
 
   render() {
@@ -35,7 +41,7 @@ class StepOne extends React.Component {
       <div>
         <h1>Step One</h1>
         <p>
-          <label for="name">Your Name:</label>
+          <label htmlFor="name">Name:</label>
           <input
             id="name"
             name="name"
@@ -45,7 +51,7 @@ class StepOne extends React.Component {
           />
         </p>
         <p>
-          <label for="email">Your Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             id="email"
             name="email"
@@ -61,19 +67,19 @@ class StepOne extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const getCalculo = calculo => {
   return {
-    calculo: state.calculo
+    calculo: calculo.CalculoReducer
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const setCalculo = dispatch => {
   return {
     next: calculo => dispatch(CalculoActions.next(calculo))
   };
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  getCalculo,
+  setCalculo
 )(StepOne);

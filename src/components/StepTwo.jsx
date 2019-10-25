@@ -1,6 +1,7 @@
 import React from "react";
 import * as CalculoActions from "../actions/CalculoActions";
 import { connect } from "react-redux";
+import history from "../history";
 
 class StepTwo extends React.Component {
   constructor(props) {
@@ -11,39 +12,45 @@ class StepTwo extends React.Component {
       city: "",
       state: ""
     };
+
+    this.next = this.next.bind(this);
+    this.previous = this.previous.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(
+      "Estou no componentDidMount do StepTwo" +
+        JSON.stringify(this.props.calculo)
+    );
+    this.setState({
+      street: this.props.calculo.street,
+      city: this.props.calculo.city,
+      state: this.props.calculo.state
+    });
   }
 
   next = () => {
-    console.log("No StepOne name: " + this.props.calculo.name);
-    console.log("No StepOne street: " + this.state.street);
-    console.log("No StepOne city: " + this.state.city);
-    console.log("No StepOne state: " + this.state.state);
+    console.log("Teste" + JSON.stringify(this.props.calculo));
 
     let calculo = {
-      name: this.props.calculo.name,
-      email: this.props.calculo.email,
       street: this.state.street,
       city: this.state.city,
-      state: this.state.state,
-      numtickets: 0,
-      shirtsize: "XL"
+      state: this.state.state
     };
 
     this.props.next(calculo);
+    history.push("/three");
   };
 
   previous = () => {
     let calculo = {
-      name: this.props.calculo.name,
-      email: this.props.calculo.email,
       street: this.state.street,
       city: this.state.city,
-      state: this.state.state,
-      numtickets: 0,
-      shirtsize: "XL"
+      state: this.state.state
     };
 
     this.props.previous(calculo);
+    history.push("/");
   };
 
   render() {
@@ -51,53 +58,51 @@ class StepTwo extends React.Component {
       <div>
         <h1>Step Two</h1>
         <p>
-          <p>
-            <label for="street">Your Street:</label>
-            <input
-              id="street"
-              name="street"
-              type="text"
-              value={this.state.street}
-              onChange={e => this.setState({ email: e.target.value })}
-            />
-          </p>
+          <label htmlFor="street">Street:</label>
+          <input
+            id="street"
+            name="street"
+            type="text"
+            value={this.state.street}
+            onChange={e => this.setState({ street: e.target.value })}
+          />
         </p>
         <p>
-          <label for="city">Your City:</label>
+          <label htmlFor="city">City:</label>
           <input
             id="city"
             name="city"
             type="text"
             value={this.state.city}
-            onChange={e => this.setState({ email: e.target.value })}
+            onChange={e => this.setState({ city: e.target.value })}
           />
         </p>
 
         <p>
-          <label for="state">Your State:</label>
+          <label htmlFor="state">State:</label>
           <input
             id="state"
             name="state"
             type="text"
             value={this.state.state}
-            onChange={e => this.setState({ email: e.target.value })}
+            onChange={e => this.setState({ state: e.target.value })}
           />
         </p>
 
-        <button onClick={this.precious}>Previous</button>
+        <button onClick={this.previous}>Previous</button>
         <button onClick={this.next}>Next</button>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+const getCalculo = calculo => {
   return {
-    calculo: state.calculo
+    calculo: calculo.CalculoReducer
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const setCalculo = dispatch => {
   return {
     next: calculo => dispatch(CalculoActions.next(calculo)),
     previous: calculo => dispatch(CalculoActions.previous(calculo))
@@ -105,6 +110,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  getCalculo,
+  setCalculo
 )(StepTwo);

@@ -1,18 +1,12 @@
 import React from "react";
-import StepOne from "./components/StepOne";
 import { Provider } from "react-redux";
 import store from "./store";
+import Router from "./routes";
 
-class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <div>
-          <StepOne />
-        </div>
-      </Provider>
-    );
-  }
-}
+const App = () => (
+  <Provider store={store}>
+    <Router />
+  </Provider>
+);
 
 export default App;
